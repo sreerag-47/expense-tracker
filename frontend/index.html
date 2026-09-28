@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | SpendWise AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="ambient-waves" aria-hidden="true">
+    <div class="wave-ring ring-1"></div>
+    <div class="wave-ring ring-2"></div>
+    <div class="wave-ring ring-3"></div>
+  </div>
+
+  <div class="glass-canvas-container">
+    <!-- Header -->
+    <header class="neo-header">
+      <a href="index.html" class="brand-group">
+        <div class="brand-symbol">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <div>
+          <div class="brand-title">SPENDWISE<span class="brand-dot">.</span>AI</div>
+          <span class="brand-subtitle">Group 18 &bull; Personal Expense Intelligence</span>
+        </div>
+      </a>
+
+      <!-- Floating Pill Navbar -->
+      <nav class="pill-navbar">
+        <a href="index.html" class="nav-pill active">
+          <i class="fa-solid fa-house"></i> Overview
+        </a>
+        <a href="transactions.html" class="nav-pill">
+          <i class="fa-solid fa-list-check"></i> Transactions
+        </a>
+        <a href="budgets.html" class="nav-pill">
+          <i class="fa-solid fa-bullseye"></i> Budgets
+        </a>
+      </nav>
+
+      <!-- Action Capsule & User -->
+      <div class="header-actions">
+        <button id="openQuickAddBtn" class="capsule-btn btn-action">
+          <span>+ New Entry</span>
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+
+        <div id="headerAuthCapsule"></div>
+      </div>
+    </header>
+
+    <!-- Meta Strip -->
+    <div class="meta-strip">
+      <div class="sdg-group">
+        <span class="sdg-tag sdg-8">.08 Decent Work</span>
+        <span class="sdg-tag sdg-4">.04 Financial Literacy</span>
+        <span class="sdg-tag sdg-12">.12 Mindful Consumption</span>
+      </div>
+      <div class="system-pills">
+        <span class="live-indicator"><span class="pulse-dot"></span> System Live</span>
+        <span class="live-indicator"><i class="fa-solid fa-robot"></i> Google Gemini 2.5 Flash</span>
+      </div>
+    </div>
+
+    <!-- Budget Warning Banner -->
+    <div id="budgetAlertBanner" class="alert-banner" style="display: none;"></div>
+
+    <!-- Hero Statement -->
+    <div class="hero-statement">
+      <div>
+        <span class="hero-eyebrow">Net Liquid Reserve</span>
+        <h1 id="heroBalance" class="hero-amount">$0.00</h1>
+        <p class="hero-description"><i class="fa-solid fa-shield-halved"></i> Active Liquidity & Emergency Buffer (SDG 8)</p>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="transactions.html" class="capsule-btn btn-subtle"><i class="fa-solid fa-list"></i> View Ledger</a>
+        <a href="budgets.html" class="capsule-btn btn-ai-glow"><i class="fa-solid fa-bullseye"></i> Manage Budgets &rarr;</a>
+      </div>
+    </div>
+
+    <!-- Three Connected Pillar Cards (.01, .02, .03) -->
+    <div class="pillars-container">
+      <div class="pillar-card pillar-inflow">
+        <div class="pillar-header">
+          <span class="pillar-index">.01</span>
+          <span class="pillar-name">Total Inflow</span>
+          <span class="pillar-sdg">SDG 8</span>
+        </div>
+        <div class="pillar-metric">
+          <h3 id="pillarIncome">$0.00</h3>
+        </div>
+        <p class="pillar-note">Cumulative income from salaries, consulting gigs, and assets.</p>
+      </div>
+
+      <div class="pillar-card pillar-outflow">
+        <div class="pillar-header">
+          <span class="pillar-index">.02</span>
+          <span class="pillar-name">Total Outflow</span>
+          <span class="pillar-sdg">SDG 12</span>
+        </div>
+        <div class="pillar-metric">
+          <h3 id="pillarExpense">$0.00</h3>
+        </div>
+        <p class="pillar-note">Cumulative outflows across living essentials and discretionary items.</p>
+      </div>
+
+      <div class="pillar-card pillar-reserve">
+        <div class="pillar-header">
+          <span class="pillar-index">.03</span>
+          <span class="pillar-name">Savings Rate</span>
+          <span class="pillar-sdg">SDG 4</span>
+        </div>
+        <div class="pillar-metric">
+          <h3 id="pillarSavingsRate">0%</h3>
+        </div>
+        <div class="pillar-progress-track">
+          <div id="pillarSavingsBar" class="pillar-progress-fill" style="width: 0%;"></div>
+        </div>
+        <p class="pillar-note">Target resilience benchmark: &ge; 20% allocated into wealth reserves.</p>
+      </div>
+    </div>
+
+    <!-- AI Spending Intelligence Highlight -->
+    <div id="dashboardAiCard" class="ai-anomaly-box">
+      <strong><i class="fa-solid fa-brain-circuit"></i> AI Spending Intelligence</strong>
+      <p style="margin-top: 0.35rem;">Analyzing spending patterns across your categories...</p>
+    </div>
+
+    <!-- Charts Grid -->
+    <div class="analytics-grid">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h4><i class="fa-solid fa-chart-pie"></i> Expense Distribution</h4>
+          <span class="cat-badge">Categories</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="categoryDoughnutChart"></canvas>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-header">
+          <h4><i class="fa-solid fa-chart-column"></i> Inflow vs. Outflow Activity</h4>
+          <span class="cat-badge">Monthly Cashflow</span>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="monthlyCashflowChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Transactions Table -->
+    <div class="panel-card">
+      <div class="panel-header">
+        <h4><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h4>
+        <a href="transactions.html" style="color: #0284c7; font-size: 0.85rem; font-weight: 700; text-decoration: none;">View Complete Ledger &rarr;</a>
+      </div>
+      <div class="ledger-table-wrap">
+        <table class="ledger-table">
+          <thead>
+            <tr>
+              <th>Title / Description</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th style="text-align: right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody id="dashboardRecentTable">
+            <tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">Loading recent activity...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="neo-footer">
+      <div><strong>SpendWise AI</strong> &bull; Group 18: Shivani Anil (51), Sreerag C Madhu (52), Sreya N V (53)</div>
+      <div>UN SDGs: 8 &bull; 4 &bull; 12 | Google Gemini 2.5 Flash</div>
+    </footer>
+  </div>
+
+  <!-- Quick Add Transaction Modal -->
+  <div id="txModal" class="neo-modal-backdrop">
+    <div class="neo-modal-dialog">
+      <div class="modal-top">
+        <div class="modal-brand"><i class="fa-solid fa-circle-plus"></i> New Transaction</div>
+        <button id="closeTxModalBtn" class="modal-close">&times;</button>
+      </div>
+
+      <form id="txForm" class="modal-form">
+        <div class="type-toggle-group">
+          <label class="toggle-pill expense-pill">
+            <input type="radio" name="txType" value="expense" checked>
+            <span><i class="fa-solid fa-arrow-down"></i> Outflow (Expense)</span>
+          </label>
+          <label class="toggle-pill income-pill">
+            <input type="radio" name="txType" value="income">
+            <span><i class="fa-solid fa-arrow-up"></i> Inflow (Income)</span>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <div class="field-wrap flex-2">
+            <label>Title / Description *</label>
+            <input type="text" id="txTitle" placeholder="e.g. Supermarket Groceries" required>
+          </div>
+          <div class="field-wrap flex-1">
+            <label>Amount *</label>
+            <input type="number" id="txAmount" placeholder="0.00" step="any" min="0.01" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-wrap flex-1">
+            <label>Category *</label>
+            <select id="txCategory" required>
+              <option value="" disabled selected>Choose Category</option>
+              <option value="Food">Food & Groceries</option>
+              <option value="Housing">Housing & Rent</option>
+              <option value="Utilities">Utilities & Bills</option>
+              <option value="Transportation">Transportation</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Education">Education (SDG 4)</option>
+              <option value="Salary">Salary</option>
+              <option value="Freelance">Freelance Consulting</option>
+              <option value="Investment">Investments</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field-wrap flex-1">
+            <label>Date *</label>
+            <input type="date" id="txDate" required>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" id="cancelTxBtn" class="capsule-btn btn-subtle">Cancel</button>
+          <button type="submit" class="capsule-btn btn-action">Save Entry &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

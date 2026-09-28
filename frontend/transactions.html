@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction Ledger | SpendWise AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="ambient-waves" aria-hidden="true">
+    <div class="wave-ring ring-1"></div>
+    <div class="wave-ring ring-2"></div>
+    <div class="wave-ring ring-3"></div>
+  </div>
+
+  <div class="glass-canvas-container">
+    <!-- Header -->
+    <header class="neo-header">
+      <a href="index.html" class="brand-group">
+        <div class="brand-symbol">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <div>
+          <div class="brand-title">SPENDWISE<span class="brand-dot">.</span>AI</div>
+          <span class="brand-subtitle">Group 18 &bull; Personal Expense Intelligence</span>
+        </div>
+      </a>
+
+      <!-- Floating Pill Navbar -->
+      <nav class="pill-navbar">
+        <a href="index.html" class="nav-pill">
+          <i class="fa-solid fa-house"></i> Overview
+        </a>
+        <a href="transactions.html" class="nav-pill active">
+          <i class="fa-solid fa-list-check"></i> Transactions
+        </a>
+        <a href="budgets.html" class="nav-pill">
+          <i class="fa-solid fa-bullseye"></i> Budgets
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="openAddTxBtn" class="capsule-btn btn-action">
+          <span>+ Add Transaction</span>
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+
+        <div id="headerAuthCapsule"></div>
+      </div>
+    </header>
+
+    <!-- Page Title & Meta -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: #0f172a;">Transaction Ledger</h1>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Record, categorize, and inspect income streams and expense outflows.</p>
+      </div>
+      <span id="txCountBadge" class="cat-badge" style="padding: 0.35rem 0.75rem; font-size: 0.8rem; background: #e0f2fe; color: #0369a1;">0 items</span>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="panel-card" style="padding: 1rem 1.25rem;">
+      <div style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
+        <div class="field-wrap" style="flex: 2; min-width: 220px;">
+          <input type="text" id="txSearchInput" placeholder="Search by title, description, or category...">
+        </div>
+
+        <div class="type-toggle-group" style="flex: 1; min-width: 180px;">
+          <button class="type-pill active" data-type="all" style="padding: 0.45rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; background: #ffffff; cursor: pointer; font-weight: 600;">All</button>
+          <button class="type-pill" data-type="expense" style="padding: 0.45rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; font-weight: 600;">Expenses</button>
+          <button class="type-pill" data-type="income" style="padding: 0.45rem 1rem; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; font-weight: 600;">Income</button>
+        </div>
+
+        <div class="field-wrap" style="flex: 1; min-width: 160px;">
+          <select id="txCategoryFilter">
+            <option value="all">All Categories</option>
+            <option value="Food">Food & Groceries</option>
+            <option value="Housing">Housing & Rent</option>
+            <option value="Utilities">Utilities & Bills</option>
+            <option value="Transportation">Transportation</option>
+            <option value="Healthcare">Healthcare</option>
+            <option value="Education">Education (SDG 4)</option>
+            <option value="Salary">Salary</option>
+            <option value="Freelance">Freelance Consulting</option>
+            <option value="Investment">Investments</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <button id="txResetBtn" class="capsule-btn btn-subtle" title="Clear Filters" style="padding: 0.55rem 0.95rem;">
+          <i class="fa-solid fa-rotate-left"></i>
+          <span>Reset</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="panel-card" style="padding: 0; overflow: hidden;">
+      <div class="ledger-table-wrap">
+        <table class="ledger-table">
+          <thead>
+            <tr>
+              <th>Title / Description</th>
+              <th>Category</th>
+              <th>Date</th>
+              <th style="text-align: right;">Amount</th>
+              <th style="text-align: center; width: 120px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="txTableBody">
+            <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading transactions...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="neo-footer">
+      <div><strong>SpendWise AI</strong> &bull; Group 18 (Shivani Anil, Sreerag C Madhu, Sreya N V)</div>
+      <div>UN SDGs: 8 &bull; 4 &bull; 12 | Google Gemini 2.5 Flash</div>
+    </footer>
+  </div>
+
+  <!-- Add / Edit Modal -->
+  <div id="txModal" class="neo-modal-backdrop">
+    <div class="neo-modal-dialog">
+      <div class="modal-top">
+        <div id="txModalTitle" class="modal-brand"><i class="fa-solid fa-circle-plus"></i> New Transaction</div>
+        <button id="closeTxModalBtn" class="modal-close">&times;</button>
+      </div>
+
+      <form id="txForm" class="modal-form">
+        <input type="hidden" id="txIdField">
+
+        <div class="type-toggle-group">
+          <label class="toggle-pill expense-pill">
+            <input type="radio" name="txType" value="expense" checked>
+            <span><i class="fa-solid fa-arrow-down"></i> Outflow (Expense)</span>
+          </label>
+          <label class="toggle-pill income-pill">
+            <input type="radio" name="txType" value="income">
+            <span><i class="fa-solid fa-arrow-up"></i> Inflow (Income)</span>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <div class="field-wrap flex-2">
+            <label>Title / Description *</label>
+            <input type="text" id="txTitle" placeholder="e.g. Clean Energy Bill" required>
+          </div>
+          <div class="field-wrap flex-1">
+            <label>Amount *</label>
+            <input type="number" id="txAmount" placeholder="0.00" step="any" min="0.01" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field-wrap flex-1">
+            <label>Category *</label>
+            <select id="txCategory" required>
+              <option value="" disabled selected>Select Category</option>
+              <option value="Food">Food & Groceries</option>
+              <option value="Housing">Housing & Rent</option>
+              <option value="Utilities">Utilities & Energy</option>
+              <option value="Transportation">Transportation</option>
+              <option value="Healthcare">Healthcare</option>
+              <option value="Education">Education (SDG 4)</option>
+              <option value="Salary">Salary</option>
+              <option value="Freelance">Freelance Consulting</option>
+              <option value="Investment">Investments</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="field-wrap flex-1">
+            <label>Date *</label>
+            <input type="date" id="txDate" required>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 0.5rem;">
+          <button type="button" id="cancelTxBtn" class="capsule-btn btn-subtle">Cancel</button>
+          <button type="submit" class="capsule-btn btn-action">Save Transaction &rarr;</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <script src="js/auth.js"></script>
+  <script src="js/transactions.js"></script>
+</body>
+</html>

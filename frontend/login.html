@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | SpendWise AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="ambient-waves" aria-hidden="true">
+    <div class="wave-ring ring-1"></div>
+    <div class="wave-ring ring-2"></div>
+  </div>
+
+  <div style="width: 100%; max-width: 440px; z-index: 1;">
+    <div class="panel-card" style="padding: 2.25rem; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08); border-radius: 22px;">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div class="brand-symbol" style="margin: 0 auto 0.75rem auto;">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">Welcome Back</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Sign in to your private financial portfolio</p>
+      </div>
+
+      <form id="loginForm" class="auth-box">
+        <div class="field-wrap">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="your.name@example.com" required>
+        </div>
+
+        <div class="field-wrap">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" id="submitLoginBtn" class="capsule-btn btn-action w-100" style="padding: 0.75rem;">
+          <span>Sign In</span>
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </form>
+
+      <div style="margin: 1.25rem 0; display: flex; align-items: center; text-align: center; color: var(--text-faint); font-size: 0.78rem;">
+        <span style="flex: 1; border-bottom: 1px solid #e2e8f0;"></span>
+        <span style="padding: 0 0.75rem; text-transform: uppercase; font-weight: 700;">or</span>
+        <span style="flex: 1; border-bottom: 1px solid #e2e8f0;"></span>
+      </div>
+
+      <!-- 1-Click Demo Button -->
+      <button type="button" id="launchDemoBtn" class="capsule-btn btn-ai-glow w-100" style="padding: 0.7rem;">
+        <i class="fa-solid fa-user-astronaut"></i>
+        <span>1-Click Demo Account (Instant Access)</span>
+      </button>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        Don't have an account? <a href="register.html" style="color: #0284c7; font-weight: 700; text-decoration: none;">Create an account</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.checkAuth(false);
+
+      const form = document.getElementById('loginForm');
+      const demoBtn = document.getElementById('launchDemoBtn');
+
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const email = document.getElementById('loginEmail').value.trim();
+          const password = document.getElementById('loginPassword').value;
+          const submitBtn = document.getElementById('submitLoginBtn');
+
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...';
+
+          try {
+            const data = await Auth.login(email, password);
+            if (data.success) {
+              window.location.href = 'index.html';
+            } else {
+              showToast(data.error || 'Invalid email or password', 'error');
+            }
+          } catch {
+            showToast('Network error logging in', 'error');
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Sign In</span> <i class="fa-solid fa-arrow-right-long"></i>';
+          }
+        });
+      }
+
+      if (demoBtn) {
+        demoBtn.addEventListener('click', async () => {
+          demoBtn.disabled = true;
+          demoBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Launching Demo...';
+
+          try {
+            const data = await Auth.demoLogin();
+            if (data.success) {
+              window.location.href = 'index.html';
+            } else {
+              showToast(data.error || 'Failed to start demo', 'error');
+            }
+          } catch {
+            showToast('Network error launching demo', 'error');
+          } finally {
+            demoBtn.disabled = false;
+            demoBtn.innerHTML = '<i class="fa-solid fa-user-astronaut"></i> <span>1-Click Demo Account (Instant Access)</span>';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "expense-tracker",
+  "version": "1.0.0",
+  "description": "AI-Powered Personal Expense Tracker with Google Gemini AI",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js"
+  },
+  "keywords": [
+    "expense-tracker",
+    "gemini-ai",
+    "budget",
+    "sdg"
+  ],
+  "author": "Group 18 (Shivani Anil, Sreerag C Madhu, Sreya N V)",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^2.22.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.9.5"
+  }
+}

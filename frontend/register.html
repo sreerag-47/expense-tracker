@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | SpendWise AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="ambient-waves" aria-hidden="true">
+    <div class="wave-ring ring-1"></div>
+    <div class="wave-ring ring-2"></div>
+  </div>
+
+  <div style="width: 100%; max-width: 460px; z-index: 1;">
+    <div class="panel-card" style="padding: 2.25rem; box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08); border-radius: 22px;">
+      <div style="text-align: center; margin-bottom: 1.5rem;">
+        <div class="brand-symbol" style="margin: 0 auto 0.75rem auto;">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a;">Create Account</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Start tracking expenses with AI intelligence</p>
+      </div>
+
+      <form id="registerForm" class="auth-box">
+        <div class="field-wrap">
+          <label>Full Name</label>
+          <input type="text" id="regName" placeholder="e.g. Sreerag C Madhu" required>
+        </div>
+
+        <div class="field-wrap">
+          <label>Email Address</label>
+          <input type="email" id="regEmail" placeholder="your.name@example.com" required>
+        </div>
+
+        <div class="field-wrap">
+          <label>Password (min 6 characters)</label>
+          <input type="password" id="regPassword" placeholder="••••••••" minlength="6" required>
+        </div>
+
+        <div class="field-wrap">
+          <label>Preferred Currency</label>
+          <select id="regCurrency">
+            <option value="USD" selected>USD ($)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="GBP">GBP (£)</option>
+          </select>
+        </div>
+
+        <button type="submit" id="submitRegBtn" class="capsule-btn btn-action w-100" style="padding: 0.75rem; margin-top: 0.5rem;">
+          <span>Create Account</span>
+          <i class="fa-solid fa-arrow-right-long"></i>
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+        Already have an account? <a href="login.html" style="color: #0284c7; font-weight: 700; text-decoration: none;">Sign in here</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      Auth.checkAuth(false);
+
+      const form = document.getElementById('registerForm');
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const name = document.getElementById('regName').value.trim();
+          const email = document.getElementById('regEmail').value.trim();
+          const password = document.getElementById('regPassword').value;
+          const currency = document.getElementById('regCurrency').value;
+          const submitBtn = document.getElementById('submitRegBtn');
+
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creating account...';
+
+          try {
+            const data = await Auth.register(name, email, password, currency);
+            if (data.success) {
+              window.location.href = 'index.html';
+            } else {
+              showToast(data.error || 'Failed to register', 'error');
+            }
+          } catch {
+            showToast('Network error during registration', 'error');
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Create Account</span> <i class="fa-solid fa-arrow-right-long"></i>';
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

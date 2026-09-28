@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpendWise AI | Neo-Fintech Expense Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Marked for Gemini Markdown parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Wave Rings Background -->
+  <div class="ambient-waves" aria-hidden="true">
+    <div class="wave-ring ring-1"></div>
+    <div class="wave-ring ring-2"></div>
+    <div class="wave-ring ring-3"></div>
+    <div class="ambient-glow glow-top"></div>
+    <div class="ambient-glow glow-bottom"></div>
+  </div>
+
+  <!-- Primary Frosted Glass Canvas Container -->
+  <div class="glass-canvas-container">
+    <!-- Top Navigation Bar -->
+    <header class="neo-header">
+      <!-- Brand & Project Meta -->
+      <div class="brand-group">
+        <div class="brand-symbol">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <div class="brand-info">
+          <span class="brand-title">SPENDWISE<span class="brand-dot">.</span>AI</span>
+          <span class="brand-subtitle">Group 18 &bull; Smart Expense Engine</span>
+        </div>
+      </div>
+
+      <!-- Floating Centered Pill Navigation -->
+      <nav class="pill-navbar" aria-label="Main Navigation">
+        <button class="nav-pill active" data-view="viewOverview">
+          <i class="fa-solid fa-house"></i> Overview
+        </button>
+        <button class="nav-pill" data-view="viewTransactions">
+          <i class="fa-solid fa-list-check"></i> Transactions
+        </button>
+        <button class="nav-pill" data-view="viewAnalytics">
+          <i class="fa-solid fa-chart-pie"></i> Analytics
+        </button>
+        <button class="nav-pill" data-view="viewAiAdvisor">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> AI Advisor
+        </button>
+      </nav>
+
+      <!-- Right Action Capsule & User Profile -->
+      <div class="header-actions">
+        <!-- New Transaction Capsule Button -->
+        <button id="openNewTxBtn" class="capsule-btn btn-action" title="Add New Transaction">
+          <span>+ New Entry</span>
+          <i class="fa-solid fa-arrow-right-long action-arrow"></i>
+        </button>
+
+        <!-- Dynamic Auth Capsule -->
+        <div id="authCapsule" class="auth-capsule">
+          <button id="openAuthModalBtn" class="capsule-btn btn-auth">
+            <span>Sign In</span>
+            <i class="fa-solid fa-arrow-right-long action-arrow"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Sub-Header SDG Badges & Live Status Strip -->
+    <div class="meta-strip">
+      <div class="sdg-group">
+        <span class="sdg-tag sdg-8" title="SDG 8: Decent Work & Economic Growth">.08 Decent Work</span>
+        <span class="sdg-tag sdg-4" title="SDG 4: Quality Financial Literacy">.04 Financial Edu</span>
+        <span class="sdg-tag sdg-12" title="SDG 12: Responsible Consumption">.12 Mindful Spending</span>
+      </div>
+      <div class="system-pills">
+        <span id="dbLivePill" class="live-indicator"><span class="pulse-dot"></span> <span id="dbModeText">Checking DB</span></span>
+        <span id="aiLivePill" class="live-indicator"><i class="fa-solid fa-microchip"></i> Gemini 2.5 Flash</span>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         VIEW 1: OVERVIEW (Default Clean Landing)
+         ========================================== -->
+    <section id="viewOverview" class="app-view active">
+      <!-- Hero Financial Statement -->
+      <div class="hero-statement">
+        <div class="hero-left">
+          <span class="hero-eyebrow">Net Liquid Reserve</span>
+          <h1 id="heroBalance" class="hero-amount">₹0.00</h1>
+          <p id="heroStatusText" class="hero-description">
+            <i class="fa-solid fa-shield-halved"></i> Initializing private portfolio telemetry...
+          </p>
+        </div>
+        <div class="hero-quick-actions">
+          <button id="heroQuickAddBtn" class="capsule-btn btn-subtle">
+            <i class="fa-solid fa-plus"></i> Record Entry
+          </button>
+          <button id="heroQuickAiBtn" class="capsule-btn btn-ai-glow">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Run AI Audit &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- Three Connected Glass Pillar Cards (.01, .02, .03) -->
+      <div class="pillars-container">
+        <!-- Connecting decorative wireframe line -->
+        <div class="pillar-wireframe-line"></div>
+
+        <!-- Pillar .01: Inflow -->
+        <div class="pillar-card pillar-inflow">
+          <div class="pillar-header">
+            <span class="pillar-index">.01</span>
+            <span class="pillar-name">Total Inflow</span>
+            <span class="pillar-sdg">SDG 8</span>
+          </div>
+          <div class="pillar-metric">
+            <h3 id="pillarIncome">₹0.00</h3>
+          </div>
+          <p class="pillar-note">Cumulative income across primary wages, freelance, and returns.</p>
+        </div>
+
+        <!-- Pillar .02: Outflow -->
+        <div class="pillar-card pillar-outflow">
+          <div class="pillar-header">
+            <span class="pillar-index">.02</span>
+            <span class="pillar-name">Total Outflow</span>
+            <span class="pillar-sdg">SDG 12</span>
+          </div>
+          <div class="pillar-metric">
+            <h3 id="pillarExpense">₹0.00</h3>
+          </div>
+          <p class="pillar-note">Audited spending on housing, groceries, utilities, and lifestyle.</p>
+        </div>
+
+        <!-- Pillar .03: Net Reserve & Literacy -->
+        <div class="pillar-card pillar-reserve">
+          <div class="pillar-header">
+            <span class="pillar-index">.03</span>
+            <span class="pillar-name">Savings Rate</span>
+            <span class="pillar-sdg">SDG 4</span>
+          </div>
+          <div class="pillar-metric">
+            <h3 id="pillarSavingsRate">0%</h3>
+          </div>
+          <div class="pillar-progress-track">
+            <div id="pillarSavingsBar" class="pillar-progress-fill" style="width: 0%;"></div>
+          </div>
+          <p class="pillar-note">Recommended benchmark: &ge; 20% allocation into reserves.</p>
+        </div>
+      </div>
+
+      <!-- Overview Bottom Snapshot: Recent Transactions & AI Snippet -->
+      <div class="overview-snapshot-grid">
+        <!-- Mini Transactions Feed -->
+        <div class="snapshot-card">
+          <div class="snapshot-header">
+            <h4><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h4>
+            <button class="link-btn" data-switch-view="viewTransactions">View All &rarr;</button>
+          </div>
+          <ul id="overviewRecentList" class="snapshot-list">
+            <li class="empty-item">No transactions logged yet.</li>
+          </ul>
+        </div>
+
+        <!-- Gemini AI Snapshot -->
+        <div class="snapshot-card ai-snapshot-card">
+          <div class="snapshot-header">
+            <h4><i class="fa-solid fa-robot"></i> Gemini AI Advisory Pulse</h4>
+            <button class="link-btn" data-switch-view="viewAiAdvisor">Open Advisor &rarr;</button>
+          </div>
+          <div id="overviewAiSnippet" class="ai-snippet-body">
+            <p>Click <strong>"Run AI Audit"</strong> to generate real-time spending insights and personalized savings tips powered by <strong>Gemini 2.5 Flash</strong>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 2: TRANSACTIONS (Uncluttered Management)
+         ========================================== -->
+    <section id="viewTransactions" class="app-view">
+      <div class="view-header">
+        <div>
+          <h2>Transaction Ledger</h2>
+          <p class="view-subtitle">Inspect, filter, and manage your complete financial history.</p>
+        </div>
+        <button id="viewAddTxBtn" class="capsule-btn btn-action">
+          <span>+ Add Transaction</span>
+          <i class="fa-solid fa-arrow-right-long action-arrow"></i>
+        </button>
+      </div>
+
+      <!-- Filter Controls Bar -->
+      <div class="filter-bar">
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="txSearchInput" placeholder="Search by title, notes, or category...">
+        </div>
+
+        <!-- Type Pills -->
+        <div class="type-pills">
+          <button class="type-pill active" data-type="all">All</button>
+          <button class="type-pill" data-type="expense">Expenses</button>
+          <button class="type-pill" data-type="income">Income</button>
+        </div>
+
+        <!-- Category Dropdown -->
+        <select id="txCategoryFilter" class="neo-select">
+          <option value="all">All Categories</option>
+          <option value="Food">Food & Dining</option>
+          <option value="Housing">Housing & Rent</option>
+          <option value="Utilities">Utilities & Bills</option>
+          <option value="Transportation">Transportation</option>
+          <option value="Education">Education (SDG 4)</option>
+          <option value="Health">Healthcare</option>
+          <option value="Entertainment">Entertainment</option>
+          <option value="Shopping">Shopping</option>
+          <option value="Salary">Salary</option>
+          <option value="Freelance">Freelance</option>
+          <option value="Investment">Investment</option>
+          <option value="Other">Other</option>
+        </select>
+
+        <button id="txResetBtn" class="btn-icon-subtle" title="Reset Filters">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+
+      <!-- Transaction List Wrapper -->
+      <div class="ledger-container">
+        <div id="txLoading" class="loading-state" style="display: none;">
+          <div class="neo-spinner"></div>
+          <span>Loading ledger records...</span>
+        </div>
+
+        <div id="txEmpty" class="empty-state" style="display: none;">
+          <i class="fa-regular fa-folder-open empty-icon"></i>
+          <h4>No matching entries found</h4>
+          <p>Try clearing your filters or create a new transaction record.</p>
+        </div>
+
+        <ul id="txList" class="ledger-list"></ul>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 3: ANALYTICS (Clean Visualizations)
+         ========================================== -->
+    <section id="viewAnalytics" class="app-view">
+      <div class="view-header">
+        <div>
+          <h2>Visual Analytics & Cashflow</h2>
+          <p class="view-subtitle">Interactive breakdown of spending distributions and monthly liquidity.</p>
+        </div>
+      </div>
+
+      <div class="analytics-grid">
+        <!-- Category Doughnut Chart -->
+        <div class="chart-panel">
+          <div class="panel-header">
+            <h4><i class="fa-solid fa-chart-pie"></i> Category Distribution</h4>
+            <span class="subtle-badge">Expense Breakdown</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="categoryChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Monthly Trends Bar Chart -->
+        <div class="chart-panel">
+          <div class="panel-header">
+            <h4><i class="fa-solid fa-chart-column"></i> Inflow vs. Outflow Trend</h4>
+            <span class="subtle-badge">Monthly Timeline</span>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="monthlyTrendChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         VIEW 4: AI ADVISOR (Gemini 2.5 Flash)
+         ========================================== -->
+    <section id="viewAiAdvisor" class="app-view">
+      <div class="view-header">
+        <div>
+          <h2>Gemini AI Financial Intelligence</h2>
+          <p class="view-subtitle">Personalized budgeting analysis, anomaly detection, and SDG guidance powered by <code>gemini-2.5-flash</code>.</p>
+        </div>
+        <button id="runAiHealthAuditBtn" class="capsule-btn btn-ai-glow">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Run Health Audit</span>
+        </button>
+      </div>
+
+      <div class="ai-advisory-grid">
+        <!-- AI Main Analysis Output -->
+        <div class="ai-report-panel">
+          <div class="panel-header">
+            <h4><i class="fa-solid fa-clipboard-check"></i> Advisory Report</h4>
+            <span id="aiLiveTag" class="model-badge">gemini-2.5-flash</span>
+          </div>
+          <div id="aiReportOutput" class="ai-report-body">
+            <div class="ai-intro-placeholder">
+              <i class="fa-solid fa-brain-circuit ai-sparkle-big"></i>
+              <h3>Ready to analyze your financial health</h3>
+              <p>Click <strong>"Run Health Audit"</strong> to trigger real-time AI spending diagnostics, wasteful cost detection, and SDG-aligned wealth building strategies.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive AI Chat Panel -->
+        <div class="ai-chat-panel">
+          <div class="panel-header">
+            <h4><i class="fa-solid fa-comments"></i> Direct Advisor Q&A</h4>
+          </div>
+          <div id="chatHistory" class="chat-history-box">
+            <div class="chat-msg assistant">
+              <i class="fa-solid fa-robot"></i>
+              <div class="msg-bubble">
+                Hello! I am your AI Financial Advisor. Ask me anything regarding your expenses, savings targets, or budgeting rules (e.g. 50/30/20 rule).
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-bar">
+            <input type="text" id="chatQueryInput" placeholder="Ask Gemini e.g. How can I optimize my food spending?" autocomplete="off">
+            <button id="sendChatQueryBtn" class="btn-send-capsule" title="Send Question">
+              <i class="fa-solid fa-arrow-up"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- App Footer -->
+    <footer class="neo-footer">
+      <div class="footer-copy">
+        <strong>SpendWise AI</strong> &bull; Group 18 (Shivani Anil, Sreerag C Madhu, Sreya N V)
+      </div>
+      <div class="footer-badges">
+        <span>UN SDGs: 8 &bull; 4 &bull; 12</span>
+        <span>Google GenAI SDK</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ==========================================
+       MODAL 1: AUTHENTICATION (Sign In / Register / Demo)
+       ========================================== -->
+  <div id="authModal" class="neo-modal-backdrop">
+    <div class="neo-modal-dialog">
+      <div class="modal-top">
+        <div class="modal-brand">
+          <i class="fa-solid fa-gem"></i>
+          <span>SpendWise Account</span>
+        </div>
+        <button id="closeAuthModalBtn" class="modal-close">&times;</button>
+      </div>
+
+      <!-- Auth Mode Tabs -->
+      <div class="auth-tabs">
+        <button id="tabSignIn" class="auth-tab active">Sign In</button>
+        <button id="tabRegister" class="auth-tab">Create Account</button>
+        <button id="tabDemo" class="auth-tab demo-tab">1-Click Demo</button>
+      </div>
+
+      <!-- Sign In Form -->
+      <form id="signInForm" class="auth-form-body">
+        <div class="field-wrap">
+          <label>Email Address</label>
+          <input type="email" id="loginEmail" placeholder="your.name@example.com" required>
+        </div>
+        <div class="field-wrap">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="capsule-btn btn-action w-100">
+          <span>Sign In</span>
+          <i class="fa-solid fa-arrow-right-long action-arrow"></i>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form-body" style="display: none;">
+        <div class="field-wrap">
+          <label>Full Name</label>
+          <input type="text" id="regName" placeholder="e.g. Sreerag C Madhu" required>
+        </div>
+        <div class="field-wrap">
+          <label>Email Address</label>
+          <input type="email" id="regEmail" placeholder="your.name@example.com" required>
+        </div>
+        <div class="field-wrap">
+          <label>Password (min 6 characters)</label>
+          <input type="password" id="regPassword" placeholder="••••••••" minlength="6" required>
+        </div>
+        <button type="submit" class="capsule-btn btn-action w-100">
+          <span>Create Account</span>
+          <i class="fa-solid fa-arrow-right-long action-arrow"></i>
+        </button>
+      </form>
+
+      <!-- 1-Click Demo Panel -->
+      <div id="demoAuthPanel" class="auth-form-body demo-panel" style="display: none;">
+        <div class="demo-info-card">
+          <i class="fa-solid fa-user-astronaut demo-icon"></i>
+          <h4>Instant Demo Account</h4>
+          <p>Instantly explore SpendWise with pre-loaded realistic transactions, AI spending insights, and Chart.js analytics without manual signup.</p>
+          <div class="demo-creds">
+            <span><strong>User:</strong> Sreerag C Madhu (Group 18)</span>
+            <span><strong>Role:</strong> Pro Member</span>
+          </div>
+        </div>
+        <button id="launchDemoBtn" type="button" class="capsule-btn btn-ai-glow w-100">
+          <span>Launch Demo Session</span>
+          <i class="fa-solid fa-arrow-right-long action-arrow"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 2: ADD / EDIT TRANSACTION
+       ========================================== -->
+  <div id="txModal" class="neo-modal-backdrop">
+    <div class="neo-modal-dialog">
+      <div class="modal-top">
+        <h3 id="txModalHeading"><i class="fa-solid fa-circle-plus"></i> New Transaction</h3>
+        <button id="closeTxModalBtn" class="modal-close">&times;</button>
+      </div>
+
+      <form id="txEntryForm" class="modal-form">
+        <input type="hidden" id="txIdField">
+
+        <!-- Type Selector -->
+        <div class="type-toggle-group">
+          <label class="toggle-pill expense-pill">
+            <input type="radio" name="entryType" value="expense" checked>
+            <span><i class="fa-solid fa-arrow-down"></i> Outflow (Expense)</span>
+          </label>
+          <label class="toggle-pill income-pill">
+            <input type="radio" name="entryType" value="income">
+            <span><i class="fa-solid fa-arrow-up"></i> Inflow (Income)</span>
+          </label>
+        </div>
+
+        <div class="form-grid">
+          <div class="field-wrap col-2">
+            <label>Title / Description *</label>
+            <input type="text" id="entryTitle" placeholder="e.g. Clean Energy Bill" required maxlength="100">
+          </div>
+          <div class="field-wrap col-1">
+            <label>Amount (₹) *</label>
+            <input type="number" id="entryAmount" placeholder="0.00" step="any" min="0.01" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field-wrap col-1">
+            <label>Category *</label>
+            <select id="entryCategory" required>
+              <option value="" disabled selected>Select Category</option>
+              <optgroup label="Needs & Consumption (SDG 12)">
+                <option value="Food">Food & Groceries</option>
+                <option value="Housing">Housing & Rent</option>
+                <option value="Utilities">Utilities & Energy</option>
+                <option value="Transportation">Transportation</option>
+                <option value="Health">Healthcare</option>
+              </optgroup>
+              <optgroup label="Growth & Literacy (SDG 8 & 4)">
+                <option value="Salary">Salary / Primary Job</option>
+                <option value="Freelance">Freelance Consulting</option>
+                <option value="Education">Education & Courses</option>
+                <option value="Investment">Investments</option>
+              </optgroup>
+              <optgroup label="Discretionary / Leisure">
+                <option value="Entertainment">Entertainment</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Other">Other</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="field-wrap col-1">
+            <label>Date *</label>
+            <input type="date" id="entryDate" required>
+          </div>
+        </div>
+
+        <div class="field-wrap">
+          <label>Notes (Optional)</label>
+          <textarea id="entryNotes" rows="2" placeholder="Context, vendor, or SDG alignment..." maxlength="500"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancelTxBtn" class="capsule-btn btn-subtle">Cancel</button>
+          <button type="submit" id="saveTxBtn" class="capsule-btn btn-action">
+            <span>Save Entry</span>
+            <i class="fa-solid fa-arrow-right-long action-arrow"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="neoToast" class="neo-toast">
+    <div class="toast-dot"></div>
+    <span id="neoToastMsg">Notification message</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
